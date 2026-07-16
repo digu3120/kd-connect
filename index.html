@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KD CONNECT — Control your Android phone with your laptop's mouse &amp; keyboard</title>
+<meta name="description" content="KD CONNECT lets you control your Android phone with your laptop's mouse and keyboard over Wi-Fi or USB — move the cursor, tap, swipe and type, without mirroring the screen. Free and private.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='10' fill='%233D5AFE'/%3E%3Cpath d='M16,10 L16,34 L23,27 L28,38 L32,36 L27,26 L36,26 Z' fill='white' stroke='%230B1560' stroke-width='1.5'/%3E%3C/svg%3E">
+<style>
+  :root{
+    --bg:#0e1017; --bg2:#12141c; --card:#1c1f2b; --card2:#232738;
+    --line:#2b3044; --text:#e8eaf0; --muted:#9aa0b4;
+    --brand:#3D5AFE; --brand2:#4d68ff; --cyan:#00E5FF; --green:#00E676; --amber:#FFB300; --red:#E53935;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,-apple-system,sans-serif;line-height:1.6;overflow-x:hidden}
+  a{color:var(--cyan);text-decoration:none}
+  img{max-width:100%}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+
+  /* nav */
+  nav{position:sticky;top:0;z-index:50;background:rgba(14,16,23,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .nav-in{display:flex;align-items:center;gap:10px;padding:14px 20px;max-width:1080px;margin:0 auto}
+  .logo{width:32px;height:32px;border-radius:8px;flex:none}
+  .brand{font-weight:800;font-size:18px;letter-spacing:.5px}
+  .nav-links{margin-left:auto;display:flex;gap:22px;align-items:center}
+  .nav-links a{color:var(--muted);font-size:14px;font-weight:600}
+  .nav-links a:hover{color:var(--text)}
+  .nav-cta{background:var(--brand);color:#fff !important;padding:8px 16px;border-radius:10px}
+  .nav-cta:hover{background:var(--brand2)}
+  @media(max-width:640px){.nav-links a:not(.nav-cta){display:none}}
+
+  /* hero */
+  header{position:relative;padding:84px 0 60px;text-align:center;background:
+    radial-gradient(600px 300px at 50% -40px, rgba(61,90,254,.25), transparent 70%),var(--bg)}
+  .pill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--card);
+    color:var(--muted);font-size:13px;font-weight:600;padding:6px 14px;border-radius:999px;margin-bottom:22px}
+  .pill .dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green)}
+  h1{font-size:clamp(30px,5.4vw,54px);font-weight:800;line-height:1.15;letter-spacing:-.5px}
+  h1 .grad{background:linear-gradient(90deg,var(--brand2),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .sub{max-width:640px;margin:18px auto 0;color:var(--muted);font-size:clamp(15px,2vw,18px)}
+  .cta-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:34px}
+  .btn{display:inline-flex;align-items:center;gap:10px;font-weight:700;font-size:15px;padding:14px 26px;border-radius:12px;transition:.18s}
+  .btn svg{flex:none}
+  .btn-primary{background:var(--brand);color:#fff}
+  .btn-primary:hover{background:var(--brand2);transform:translateY(-2px)}
+  .btn-ghost{border:1px solid var(--line);background:var(--card);color:var(--text)}
+  .btn-ghost:hover{border-color:var(--brand);transform:translateY(-2px)}
+  .hero-note{margin-top:14px;color:var(--muted);font-size:13px}
+
+  /* hero visual */
+  .mock{margin:56px auto 0;max-width:760px;display:flex;align-items:center;justify-content:center;gap:0;flex-wrap:wrap}
+  .laptop{width:340px;max-width:88vw}
+  .laptop .screen{background:linear-gradient(160deg,var(--card),var(--card2));border:2px solid var(--line);border-bottom:none;
+    border-radius:12px 12px 0 0;padding:16px;height:190px;position:relative;overflow:hidden}
+  .laptop .base{height:12px;background:#2a2f42;border-radius:0 0 14px 14px}
+  .win-title{display:flex;gap:6px;margin-bottom:12px}
+  .win-title i{width:10px;height:10px;border-radius:50%;background:#3a3f52;display:block}
+  .fake-row{height:10px;border-radius:5px;background:#2b3044;margin:10px 0}
+  .fake-row.b{width:70%}.fake-row.c{width:45%}
+  .cursor-fly{position:absolute;right:26px;bottom:26px;animation:fly 3.2s ease-in-out infinite alternate}
+  @keyframes fly{from{transform:translate(0,0)}to{transform:translate(-36px,-28px)}}
+  .link-beam{flex:none;width:120px;height:4px;background:linear-gradient(90deg,var(--brand),var(--cyan));border-radius:2px;position:relative;margin:0 6px}
+  .link-beam::after{content:"Wi-Fi · USB";position:absolute;top:-26px;left:50%;transform:translateX(-50%);
+    color:var(--muted);font-size:12px;font-weight:700;white-space:nowrap;letter-spacing:.5px}
+  .phone{width:120px}
+  .phone .body{background:linear-gradient(160deg,var(--card),var(--card2));border:2px solid var(--line);border-radius:20px;height:230px;padding:12px 10px;position:relative}
+  .phone .notch{width:40px;height:6px;background:#2a2f42;border-radius:3px;margin:0 auto 12px}
+  .phone .dotlive{position:absolute;top:10px;left:12px;width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:pulse 1.4s infinite alternate}
+  @keyframes pulse{from{opacity:1}to{opacity:.35}}
+  .phone .cursor2{position:absolute;left:34px;top:96px;animation:fly2 3.2s ease-in-out infinite alternate}
+  @keyframes fly2{from{transform:translate(0,0)}to{transform:translate(28px,34px)}}
+  @media(max-width:640px){.link-beam{width:60px;transform:rotate(90deg);margin:26px 0}}
+
+  /* sections */
+  section{padding:76px 0}
+  .sec-head{text-align:center;max-width:660px;margin:0 auto 46px}
+  .kicker{color:var(--brand2);font-weight:800;font-size:13px;text-transform:uppercase;letter-spacing:2px}
+  h2{font-size:clamp(24px,3.6vw,36px);font-weight:800;margin-top:8px}
+  .sec-head p{color:var(--muted);margin-top:12px}
+
+  /* features */
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px;transition:.18s}
+  .card:hover{transform:translateY(-4px);border-color:#3a4260}
+  .card .ic{width:44px;height:44px;border-radius:12px;background:rgba(61,90,254,.15);display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+  .card h3{font-size:16px;margin-bottom:6px}
+  .card p{color:var(--muted);font-size:14px}
+
+  /* steps */
+  .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;counter-reset:step}
+  .step{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:26px;position:relative}
+  .step .n{width:34px;height:34px;border-radius:50%;background:var(--brand);color:#fff;font-weight:800;
+    display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+  .step h3{font-size:16px;margin-bottom:6px}
+  .step p{color:var(--muted);font-size:14px}
+
+  /* compare */
+  .compare{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;max-width:860px;margin:0 auto}
+  .cmp{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:28px}
+  .cmp.best{border-color:rgba(0,230,118,.45);box-shadow:0 0 40px rgba(0,230,118,.06)}
+  .cmp .tag{display:inline-block;font-size:11px;font-weight:800;letter-spacing:1px;padding:4px 10px;border-radius:8px;margin-bottom:12px}
+  .tag.g{background:var(--green);color:#04210f}
+  .tag.b{background:var(--brand);color:#fff}
+  .cmp h3{font-size:20px;margin-bottom:12px}
+  .cmp ul{list-style:none}
+  .cmp li{color:var(--muted);font-size:14px;padding:7px 0 7px 26px;position:relative}
+  .cmp li::before{content:"✓";position:absolute;left:0;color:var(--green);font-weight:800}
+  .cmp li.warn::before{content:"→";color:var(--amber)}
+
+  /* download */
+  #download{background:radial-gradient(500px 260px at 50% 0,rgba(61,90,254,.16),transparent 70%)}
+  .dl-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:20px;max-width:860px;margin:0 auto}
+  .dl{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:32px;text-align:center;transition:.18s}
+  .dl:hover{transform:translateY(-4px);border-color:var(--brand)}
+  .dl .os-ic{width:64px;height:64px;margin:0 auto 16px;border-radius:16px;background:rgba(61,90,254,.15);display:flex;align-items:center;justify-content:center}
+  .dl h3{font-size:20px}
+  .dl .meta{color:var(--muted);font-size:13px;margin:8px 0 20px}
+  .dl .btn{width:100%;justify-content:center}
+  .dl .small{display:block;margin-top:12px;color:var(--muted);font-size:12px}
+
+  /* faq */
+  .faq{max-width:760px;margin:0 auto}
+  details{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 22px;margin-bottom:12px}
+  summary{cursor:pointer;font-weight:700;font-size:15px;list-style:none;display:flex;justify-content:space-between;align-items:center}
+  summary::after{content:"+";font-size:20px;color:var(--brand2);transition:.2s}
+  details[open] summary::after{transform:rotate(45deg)}
+  details p{color:var(--muted);font-size:14px;margin-top:12px}
+
+  footer{border-top:1px solid var(--line);padding:36px 0;text-align:center;color:var(--muted);font-size:13px}
+  footer .f-links{display:flex;gap:20px;justify-content:center;margin-bottom:12px;flex-wrap:wrap}
+  footer a{color:var(--muted)}
+  footer a:hover{color:var(--text)}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-in">
+    <svg class="logo" viewBox="0 0 48 48"><rect width="48" height="48" rx="10" fill="#3D5AFE"/><path d="M16,10 L16,34 L23,27 L28,38 L32,36 L27,26 L36,26 Z" fill="#fff" stroke="#0B1560" stroke-width="1.5"/></svg>
+    <span class="brand">KD CONNECT</span>
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#how">How it works</a>
+      <a href="#faq">FAQ</a>
+      <a class="nav-cta" href="#download">Download</a>
+    </div>
+  </div>
+</nav>
+
+<header>
+  <div class="wrap">
+    <div class="pill"><span class="dot"></span> Free · No accounts · Works over Wi-Fi &amp; USB</div>
+    <h1>Control your Android phone with your <span class="grad">laptop's mouse &amp; keyboard</span></h1>
+    <p class="sub">Move a real cursor on your phone, click, swipe and type from your laptop — <strong>without mirroring the screen</strong>. Press <b>F9</b> and your phone becomes an extension of your desk.</p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="#download">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download free
+      </a>
+      <a class="btn btn-ghost" href="#how">See how it works</a>
+    </div>
+    <div class="hero-note">Windows 10/11 desktop app &nbsp;·&nbsp; Android 8.0+ app</div>
+
+    <div class="mock" aria-hidden="true">
+      <div class="laptop">
+        <div class="screen">
+          <div class="win-title"><i></i><i></i><i></i></div>
+          <div class="fake-row"></div><div class="fake-row b"></div><div class="fake-row c"></div>
+          <svg class="cursor-fly" width="22" height="22" viewBox="0 0 24 24"><path d="M4 2 L4 20 L9.5 14.8 L13 22 L15.8 20.6 L12.4 13.6 L19 13.6 Z" fill="#fff" stroke="#0B1560" stroke-width="1.2"/></svg>
+        </div>
+        <div class="base"></div>
+      </div>
+      <div class="link-beam"></div>
+      <div class="phone">
+        <div class="body">
+          <span class="dotlive"></span>
+          <div class="notch"></div>
+          <div class="fake-row"></div><div class="fake-row b"></div><div class="fake-row c"></div>
+          <svg class="cursor2" width="18" height="18" viewBox="0 0 24 24"><path d="M4 2 L4 20 L9.5 14.8 L13 22 L15.8 20.6 L12.4 13.6 L19 13.6 Z" fill="#fff" stroke="#0B1560" stroke-width="1.2"/></svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section id="features">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">Features</span>
+      <h2>Everything a real mouse &amp; keyboard should do</h2>
+      <p>Not a screen mirror. Your phone stays a phone — you just drive it from the laptop.</p>
+    </div>
+    <div class="grid">
+      <div class="card"><div class="ic">🖱️</div><h3>Pinpoint cursor</h3><p>A real, precise cursor on your phone's screen. 1:1 movement with adjustable speed.</p></div>
+      <div class="card"><div class="ic">👆</div><h3>Taps, swipes &amp; gestures</h3><p>Click to tap, hold to long-press, drag to swipe any direction — flicks included.</p></div>
+      <div class="card"><div class="ic">⌨️</div><h3>Real typing</h3><p>Type into any app — passwords included — plus Ctrl+A / C / V / X / Z shortcuts.</p></div>
+      <div class="card"><div class="ic">⚡</div><h3>USB mode: zero lag</h3><p>Plug in a cable for wired-mouse smoothness (~1–2 ms) that's immune to Wi-Fi congestion.</p></div>
+      <div class="card"><div class="ic">📡</div><h3>Wireless over Wi-Fi</h3><p>No cable needed — pair by QR code, device discovery, or by typing the address once.</p></div>
+      <div class="card"><div class="ic">🔒</div><h3>You approve every laptop</h3><p>Nothing controls your phone until you tap Allow. Trusted laptops reconnect silently.</p></div>
+      <div class="card"><div class="ic">🟢</div><h3>Always visible</h3><p>A green status-bar dot shows whenever control is active. Your keyboard auto-restores after.</p></div>
+      <div class="card"><div class="ic">🛡️</div><h3>Private by design</h3><p>No accounts, no servers, no analytics. Input goes only to your device, on your network.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="how" style="background:var(--bg2)">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">How it works</span>
+      <h2>Connected in under a minute</h2>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="n">1</div><h3>Install both apps</h3><p>The KD CONNECT app on your Android phone, and the desktop app on your Windows laptop.</p></div>
+      <div class="step"><div class="n">2</div><h3>Set up the phone once</h3><p>A guided 2-step setup enables the Accessibility service (cursor &amp; taps) and the KD CONNECT keyboard (typing).</p></div>
+      <div class="step"><div class="n">3</div><h3>Pair your way</h3><p>Scan the QR code, pick your phone from the list, or plug in a USB cable — then tap <b>Allow</b> on the phone.</p></div>
+      <div class="step"><div class="n">4</div><h3>Press F9</h3><p>Your mouse and keyboard now drive the phone. Press F9 again to take them back. That's it.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">Two ways to connect</span>
+      <h2>Wi-Fi for convenience. USB for speed.</h2>
+      <p>Use one at a time and switch whenever you like — they never conflict.</p>
+    </div>
+    <div class="compare">
+      <div class="cmp">
+        <span class="tag b">EASIEST</span>
+        <h3>Wi-Fi</h3>
+        <ul>
+          <li>No cable — pair by QR, discovery or address</li>
+          <li>Low-latency mode + smart packet pacing built in</li>
+          <li>Great on a quiet network</li>
+          <li class="warn">Speed depends on your Wi-Fi — busy networks can lag</li>
+        </ul>
+      </div>
+      <div class="cmp best">
+        <span class="tag g">FASTEST</span>
+        <h3>USB cable</h3>
+        <ul>
+          <li>Feels like a wired mouse (~1–2 ms)</li>
+          <li>Immune to Wi-Fi congestion — never lags</li>
+          <li>Works even with Wi-Fi turned off</li>
+          <li class="warn">One-time setup: enable USB debugging (guided)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="download">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">Download</span>
+      <h2>Get KD CONNECT — free</h2>
+      <p>You need both: the desktop app on your laptop and the app on your phone.</p>
+    </div>
+    <div class="dl-grid">
+      <div class="dl">
+        <div class="os-ic">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="#4d68ff"><path d="M3 5.5 10.5 4.4 10.5 11.5 3 11.5zM11.5 4.25 21 3 21 11.5 11.5 11.5zM3 12.5 10.5 12.5 10.5 19.6 3 18.5zM11.5 12.5 21 12.5 21 21 11.5 19.75z"/></svg>
+        </div>
+        <h3>Windows desktop app</h3>
+        <div class="meta">Windows 10 / 11 · 64-bit · single portable .exe</div>
+        <a class="btn btn-primary" href="https://github.com/digu3120/kd-connect/releases/latest/download/KDConnect.exe">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download for Windows
+        </a>
+        <span class="small">No install — just download and run <b>KDConnect.exe</b>. If SmartScreen appears, choose “More info → Run anyway”.</span>
+      </div>
+      <div class="dl">
+        <div class="os-ic">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="#00E676"><path d="M17.6 9.48l1.84-3.18c.16-.31.04-.7-.26-.85-.29-.15-.65-.06-.83.22l-1.88 3.24a11.46 11.46 0 0 0-8.94 0L5.65 5.67c-.19-.28-.54-.37-.83-.22-.3.15-.42.54-.26.85L6.4 9.48A10.81 10.81 0 0 0 1 18h22a10.81 10.81 0 0 0-5.4-8.52zM7 15.25a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5zm10 0a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5z"/></svg>
+        </div>
+        <h3>Android app (APK)</h3>
+        <div class="meta">Android 8.0+ · signed APK</div>
+        <a class="btn btn-primary" href="https://github.com/digu3120/kd-connect/releases/latest/download/KDConnect.apk">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download APK
+        </a>
+        <span class="small">Open the APK on your phone and allow “install from this source” when asked.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="faq" style="background:var(--bg2)">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">FAQ</span>
+      <h2>Questions, answered</h2>
+    </div>
+    <div class="faq">
+      <details>
+        <summary>Is this screen mirroring?</summary>
+        <p>No. Your phone's screen stays on the phone. KD CONNECT sends only your mouse and keyboard input, so you use the phone directly — with a cursor.</p>
+      </details>
+      <details>
+        <summary>Can someone else control my phone?</summary>
+        <p>No. Every new laptop must be approved on the phone with an Allow prompt before it can do anything. You can disconnect or turn the service off at any time, and a green dot is always visible while control is active.</p>
+      </details>
+      <details>
+        <summary>Does it collect my data?</summary>
+        <p>Nothing is collected. There are no accounts, no analytics and no servers — input travels directly between your laptop and phone on your own network or cable. See the privacy policy in the app.</p>
+      </details>
+      <details>
+        <summary>The mouse feels laggy on Wi-Fi. What can I do?</summary>
+        <p>Busy Wi-Fi networks add delay. KD CONNECT already keeps your phone's Wi-Fi in low-latency mode and paces its traffic, but for guaranteed smoothness use <b>USB mode</b> — it's immune to network congestion — or connect the laptop to your phone's hotspot.</p>
+      </details>
+      <details>
+        <summary>Can I type passwords?</summary>
+        <p>Yes — typing uses real key events, which work in password fields too. The KD CONNECT keyboard must be active while you type; your normal keyboard is restored automatically afterwards.</p>
+      </details>
+      <details>
+        <summary>How many devices can I connect?</summary>
+        <p>One phone and one laptop at a time — by design, so it's always clear who is in control. Switching to another device or transport disconnects the previous one cleanly.</p>
+      </details>
+      <details>
+        <summary>Why does Windows warn me when I run the app?</summary>
+        <p>The app isn't code-signed with a paid certificate yet, so SmartScreen shows a notice for any new download. Choose “More info → Run anyway”. The app is free, runs entirely on your own devices, and sends nothing to any server.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="f-links">
+      <a href="https://github.com/digu3120/kd-connect">GitHub</a>
+      <a href="https://github.com/digu3120/kd-connect/blob/main/PRIVACY.md">Privacy policy</a>
+      <a href="https://github.com/digu3120/kd-connect/releases">All releases</a>
+      <a href="#download">Download</a>
+    </div>
+    <div>KD CONNECT · Free · No accounts, no servers, no tracking</div>
+  </div>
+</footer>
+
+</body>
+</html>
