@@ -267,12 +267,12 @@
           <svg width="34" height="34" viewBox="0 0 24 24" fill="#4d68ff"><path d="M3 5.5 10.5 4.4 10.5 11.5 3 11.5zM11.5 4.25 21 3 21 11.5 11.5 11.5zM3 12.5 10.5 12.5 10.5 19.6 3 18.5zM11.5 12.5 21 12.5 21 21 11.5 19.75z"/></svg>
         </div>
         <h3>Windows desktop app</h3>
-        <div class="meta">Version 1.1 · Windows 10 / 11 · 64-bit · single portable .exe</div>
+        <div class="meta">Version 1.1.1 · Windows 10 / 11 · 64-bit · single portable .exe</div>
         <a class="btn btn-primary" href="https://github.com/digu3120/kd-connect/releases/latest/download/KDConnect.exe">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           Download for Windows
         </a>
-        <span class="small">No install — just download and run <b>KDConnect.exe</b>. If SmartScreen appears, choose “More info → Run anyway”.</span>
+        <span class="small">No install — just download and run <b>KDConnect.exe</b>. If SmartScreen appears, choose “More info → Run anyway”. Windows then asks for administrator permission — click <b>Yes</b> so it also works over AnyDesk, UltraViewer and other admin windows.</span>
       </div>
       <div class="dl">
         <div class="os-ic">
@@ -320,6 +320,14 @@
       <details>
         <summary>Why can't I click “Allow” on a permission pop-up with the mouse?</summary>
         <p>Android (14 and newer) deliberately ignores remote clicks on permission prompts and app install / uninstall screens, so no app — KD CONNECT included — can ever press “Allow” for you. Tap those few buttons with your finger; KD CONNECT shows a reminder on the phone when one appears. Everything else works with the mouse.</p>
+      </details>
+      <details>
+        <summary>Does it work while I use AnyDesk, UltraViewer or TeamViewer?</summary>
+        <p>Yes. Those apps run their windows with administrator rights, and Windows hides the keyboard and mouse from normal apps while such a window is in front. So KD CONNECT asks for administrator permission when it starts — click <b>Yes</b> and F9, the screen edge and phone control keep working over them. Prefer no prompt? Untick <b>Settings → Run as administrator</b>; everything else still works.</p>
+      </details>
+      <details>
+        <summary>Why does it ask for administrator permission?</summary>
+        <p>Only so Windows lets it see your mouse and keyboard while an admin window (AnyDesk, UltraViewer, Task Manager…) is in front. It doesn't install anything or change system settings, and it still sends nothing to any server. If you click <b>No</b>, it simply runs with normal rights.</p>
       </details>
       <details>
         <summary>How do I copy and paste between laptop and phone?</summary>
