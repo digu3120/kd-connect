@@ -302,6 +302,14 @@
         <p>No. Your phone's screen stays on the phone. KD CONNECT sends only your mouse and keyboard input, so you use the phone directly — with a cursor.</p>
       </details>
       <details>
+        <summary>Play Protect says “Blocked” / the APK won't install</summary>
+        <p>Android's Play Protect is cautious about apps from outside the Play Store that use Accessibility (KD CONNECT needs it to move the cursor and tap). In India, Google's fraud protection can block such installs from a browser, WhatsApp or file manager. Try in order: tap <b>More details → Install anyway</b> if shown; or install from your laptop over USB (USB debugging on, then <code>adb install KDConnect.apk</code>); or briefly turn off <b>Play Store → profile → Play Protect → ⚙ → Scan apps with Play Protect</b>, install, and turn it back on. If Android says <b>“package conflicts with an existing package”</b>, an older copy signed differently is installed: uninstall it in Settings first, then install.</p>
+      </details>
+      <details>
+        <summary>The Accessibility switch is greyed out (“Restricted setting”)</summary>
+        <p>Android 13 and newer protect Accessibility for apps installed outside the Play Store. Open <b>Settings → Apps → KD CONNECT</b>, tap <b>⋮</b> in the top-right corner, choose <b>Allow restricted settings</b> and confirm. Then turn KD CONNECT on in Accessibility.</p>
+      </details>
+      <details>
         <summary>Can someone else control my phone?</summary>
         <p>No. Every new laptop must be approved on the phone with an Allow prompt before it can do anything. You can disconnect or turn the service off at any time, and a green dot is always visible while control is active.</p>
       </details>
